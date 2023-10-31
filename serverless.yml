@@ -1,0 +1,77 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: rekognize-image-serverless-app
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.11
+  stage: dev
+  region: ap-northeast-2
+
+functions:
+  RekognizeImageFunc:
+    handler: handler.lambda_handler
+    events:
+      - s3:
+          bucket: rekognize-images-bucket-20-10-2023
+          event: s3:ObjectCreated:Put
+    role: 
+      Fn::GetAtt:
+        - IamRole
+        - Arn
+    environment:
+      AWS_ACCOUNT_ID: ${env:AWS_ACCOUNT_ID}
+
+resources:
+  Resources:
+    RekognizeImagesBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: rekognize-images-bucket-20-10-2023
+    IamRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: RekognizeImageRole
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: RekognizeImagePolicy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - rekognition:DetectLabels
+                  Resource: "*"
+                - Effect: Allow
+                  Action:
+                    - s3:GetObject
+                    - logs:CreateLogGroup
+                  Resource:
+                    - "arn:aws:s3:::rekognize-images-bucket-20-10-2023/*"
+                    - "arn:aws:logs:*:*:*"
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource: 
+                    Fn::Sub: "arn:aws:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/RekognizeImageAppFunc:*"
