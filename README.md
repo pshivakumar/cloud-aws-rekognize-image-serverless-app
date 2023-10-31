@@ -77,7 +77,7 @@ Before you get started, ensure you have the following prerequisites:
     View image recognition results through the chosen output method, such as logs, API endpoints, or custom integrations.
 
 ### Contributing
-    We welcome contributions! To contribute to this project
+    We welcome contributions!
 
 ### License
-    This project is licensed under the [MIT License](https://opensource.org/licenses/MIT)
+This project is licensed under [MIT License](https://opensource.org/licenses/MIT/)
