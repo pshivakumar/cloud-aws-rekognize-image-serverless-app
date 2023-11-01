@@ -1,9 +1,19 @@
 import boto3
+import logging
+import os
+
+def init_logging():   
+    # Configure the logger to use the specified log group
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    return logger
+
 
 def lambda_handler(event, context):
+    logger = init_logging()
     rekognition = boto3.client('rekognition')
     
-    print(f"Event structure is - {event}")
+    logger.info(f"Event structure is - {event}")
     
     # Check if the event structure includes 'Records'
     if 'Records' in event:
@@ -20,7 +30,7 @@ def lambda_handler(event, context):
         )
 
         for label in response['Labels']:
-            print(f"Label: {label['Name']}, Confidence: {label['Confidence']}")
+            logger.info(f"Label: {label['Name']}, Confidence: {label['Confidence']}")
         
         return {
             'statusCode': 200,
@@ -28,18 +38,8 @@ def lambda_handler(event, context):
         }
     else:
         # Handle the case when 'Records' is not present in the event structure
-        print("No 'Records' found in the event structure.")
+        logger.info("No 'Records' found in the event structure.")
         return {
             'statusCode': 400,
             'body': 'Invalid event structure.'
         }
-
-
-    # Use this code if you don't use the http event with the LAMBDA-PROXY
-    # integration
-    """
-    return {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "event": event
-    }
-    """

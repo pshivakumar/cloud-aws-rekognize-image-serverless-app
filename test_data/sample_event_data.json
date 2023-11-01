@@ -1,0 +1,28 @@
+{
+    "Records": [
+      {
+        "eventVersion": "2.1",
+        "eventSource": "aws:s3",
+        "awsRegion": "us-east-1",
+        "eventTime": "2023-10-31T01:23:45.678Z",
+        "eventName": "ObjectCreated:Put",
+        "s3": {
+          "s3SchemaVersion": "1.0",
+          "configurationId": "test-config-rule",
+          "bucket": {
+            "name": "rekognize-images-31-10-2023-mayflower-bucket",
+            "ownerIdentity": {
+              "principalId": "A3NL1KOZZKExample"
+            },
+            "arn": "arn:aws:s3:::rekognize-images-31-10-2023-mayflower-bucket"
+          },
+          "object": {
+            "key": "test_dog_image.jpg",
+            "size": 1024,
+            "eTag": "d41d8cd98f00b204e9800998ecf8427e",
+            "sequencer": "0055AED6DCD90281E5"
+          }
+        }
+      }
+    ]
+  }
